@@ -7,35 +7,32 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Gemini API에서 반환하는 분석 결과를 매핑하는 DTO입니다.
- * JSON 응답을 이 객체로 파싱합니다.
+ * Gemini API에서 반환하는 SWOT 분석 결과를 매핑하는 DTO입니다.
+ * Gemini는 루트 선택/유사도 계산을 하지 않고, SWOT 분석만 담당합니다.
+ * (루트 매칭 및 유사도는 서버의 SimilarityCalculator가 수행)
  */
 @Getter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeminiAnalysisResult {
 
-    private List<MatchedRoute> matchedRoutes;
-    private AiInsight aiInsight;
+    /**
+     * AI가 판단한 매칭 이유
+     */
+    private String reason;
 
-    @Getter
-    @NoArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MatchedRoute {
-        private Long routeId;
-        private Double similarity;
-        private String summary;
-        private String job;
-        private String finalCompanySize;
-    }
+    /**
+     * 사용자 강점
+     */
+    private List<String> strengths;
 
-    @Getter
-    @NoArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class AiInsight {
-        private String reason;
-        private List<String> strengths;
-        private List<String> weaknesses;
-        private List<String> recommendations;
-    }
+    /**
+     * 사용자 약점
+     */
+    private List<String> weaknesses;
+
+    /**
+     * 로드맵 제언
+     */
+    private List<String> recommendations;
 }
