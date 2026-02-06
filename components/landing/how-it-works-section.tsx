@@ -18,9 +18,9 @@ const steps = [
   {
     icon: Map,
     number: "03",
-    title: "합격 루트 확인",
+    title: "합격 동아줄 확인",
     description:
-      "추천된 합격 루트를 시각화된 타임라인으로 확인하고, 각 단계별 상세 정보를 탐색합니다.",
+      "추천된 합격 동아줄을 시각화된 타임라인으로 확인하고, 각 단계별 상세 정보를 탐색합니다.",
   },
 ];
 
@@ -33,7 +33,7 @@ export function HowItWorksSection() {
             How it works
           </p>
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
-            3단계로 시작하는 합격 루트 탐색
+            3단계로 시작하는 합격 동아줄 탐색
           </h2>
         </div>
 

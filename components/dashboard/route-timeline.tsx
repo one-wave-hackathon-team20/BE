@@ -55,7 +55,7 @@ export function RouteTimeline({
               <CardTitle className="text-xl">
                 {BACKGROUND_LABELS[route.background]}
                 {" → "}
-                {COMPANY_SIZE_LABELS[route.companySize]} 합격 루트
+                {COMPANY_SIZE_LABELS[route.companySize]} 합격 동아줄
               </CardTitle>
               <CardDescription className="mt-1">
                 {route.job === "frontend" ? "Frontend" : "Backend"} /{" "}

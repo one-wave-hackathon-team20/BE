@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,11 +25,16 @@ import {
   COMPANY_SIZE_LABELS,
   SKILL_OPTIONS,
 } from "@/lib/data";
+import { apiClient } from "@/lib/api/client";
+import type { Job as ApiJob, Background as ApiBackground } from "@/lib/api/types";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/auth-context";
 
 const TOTAL_STEPS = 4;
 
 export function OnboardingForm() {
   const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuth();
   const [step, setStep] = useState(1);
   const [job, setJob] = useState<Job | null>(null);
   const [background, setBackground] = useState<Background | null>(null);
@@ -39,6 +44,23 @@ export function OnboardingForm() {
   const [intern, setIntern] = useState(false);
   const [bootcamp, setBootcamp] = useState(false);
   const [awards, setAwards] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 인증되지 않은 경우 로그인 페이지로 리다이렉트 (클라이언트에서만)
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  // 로딩 중이거나 인증되지 않은 경우 로딩 표시
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-primary" />
+      </div>
+    );
+  }
 
   const progress = (step / TOTAL_STEPS) * 100;
 
@@ -69,23 +91,45 @@ export function OnboardingForm() {
     );
   };
 
-  const handleComplete = () => {
-    // In production, this would save to Supabase
-    const userData = {
-      job,
-      background,
-      companySizes,
-      skills,
-      projects,
-      intern,
-      bootcamp,
-      awards,
-    };
-    // Store in sessionStorage for demo purposes
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("userProfile", JSON.stringify(userData));
+  const convertJobToApi = (job: Job): ApiJob => {
+    return job === "frontend" ? "FRONTEND" : "BACKEND";
+  };
+
+  const convertBackgroundToApi = (background: Background): ApiBackground => {
+    return background === "major" ? "MAJOR" : "NON_MAJOR";
+  };
+
+  const handleComplete = async () => {
+    if (!job || !background) {
+      toast.error("직무와 전공을 선택해주세요.");
+      return;
     }
-    router.push("/dashboard");
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await apiClient.completeOnboarding({
+        job: convertJobToApi(job),
+        background: convertBackgroundToApi(background),
+        companySizes: companySizes.length > 0 ? companySizes : undefined,
+        skills: skills.length > 0 ? skills : undefined,
+        projects,
+        intern: intern || undefined,
+        bootcamp: bootcamp || undefined,
+        awards: awards || undefined,
+      });
+
+      if (response.isSuccess) {
+        toast.success("온보딩이 완료되었습니다!");
+        router.push("/dashboard");
+      } else {
+        throw new Error(response.message || "온보딩 저장에 실패했습니다.");
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "온보딩 저장에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -437,9 +481,9 @@ export function OnboardingForm() {
             <ArrowRight className="h-4 w-4" />
           </Button>
         ) : (
-          <Button onClick={handleComplete} className="gap-2">
-            분석 시작하기
-            <ArrowRight className="h-4 w-4" />
+          <Button onClick={handleComplete} className="gap-2" disabled={isSubmitting}>
+            {isSubmitting ? "저장 중..." : "분석 시작하기"}
+            {!isSubmitting && <ArrowRight className="h-4 w-4" />}
           </Button>
         )}
       </div>

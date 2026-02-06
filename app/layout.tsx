@@ -1,6 +1,8 @@
 import React from "react"
 import type { Metadata } from "next";
 import { Noto_Sans_KR, Inter } from "next/font/google";
+import { AuthProvider } from "@/contexts/auth-context";
+import { Toaster } from "sonner";
 
 import "./globals.css";
 
@@ -23,7 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <AuthProvider>
+          {children}
+          <Toaster position="top-center" />
+        </AuthProvider>
+      </body>
     </html>
   );
 }

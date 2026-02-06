@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Brain, AlertTriangle, TrendingUp, CheckCircle2 } from "lucide-react";
+import type { AnalysisResponse } from "@/lib/api/types";
 
 interface AIAnalysisProps {
   matchScore: number;
@@ -13,6 +14,7 @@ interface AIAnalysisProps {
   hasBootcamp: boolean;
   hasAwards: boolean;
   projectCount: number;
+  analysis?: AnalysisResponse | null;
 }
 
 export function AIAnalysisSection({
@@ -22,6 +24,7 @@ export function AIAnalysisSection({
   hasBootcamp,
   hasAwards,
   projectCount,
+  analysis,
 }: AIAnalysisProps) {
   const [animatedScore, setAnimatedScore] = useState(0);
 
@@ -41,20 +44,26 @@ export function AIAnalysisSection({
     return () => clearTimeout(timer);
   }, [matchScore]);
 
-  // Generate insights based on user data
-  const strengths: string[] = [];
-  const weaknesses: string[] = [];
+  // Use analysis data if available, otherwise generate insights based on user data
+  const strengths: string[] = analysis?.strengths || [];
+  const weaknesses: string[] = analysis?.weaknesses || [];
+  const recommendations: string[] = analysis?.recommendations || [];
 
-  if (skills.length >= 3) strengths.push("다양한 기술 스택 보유");
-  if (hasBootcamp) strengths.push("부트캠프 경험으로 체계적 학습 이력");
-  if (projectCount >= 2) strengths.push("충분한 프로젝트 경험");
-  if (hasIntern) strengths.push("인턴십을 통한 실무 경험");
+  // Fallback to generated insights if no analysis data
+  if (strengths.length === 0) {
+    if (skills.length >= 3) strengths.push("다양한 기술 스택 보유");
+    if (hasBootcamp) strengths.push("부트캠프 경험으로 체계적 학습 이력");
+    if (projectCount >= 2) strengths.push("충분한 프로젝트 경험");
+    if (hasIntern) strengths.push("인턴십을 통한 실무 경험");
+  }
 
-  if (!hasIntern) weaknesses.push("인턴 경험 추가 시 대기업 루트 가능성 증가");
-  if (projectCount < 2)
-    weaknesses.push("포트폴리오 프로젝트 2개 이상 권장");
-  if (!hasAwards) weaknesses.push("수상 경력이 있으면 차별점 확보 가능");
-  if (skills.length < 3) weaknesses.push("기술 스택 다양화 권장");
+  if (weaknesses.length === 0) {
+    if (!hasIntern) weaknesses.push("인턴 경험 추가 시 대기업 루트 가능성 증가");
+    if (projectCount < 2)
+      weaknesses.push("포트폴리오 프로젝트 2개 이상 권장");
+    if (!hasAwards) weaknesses.push("수상 경력이 있으면 차별점 확보 가능");
+    if (skills.length < 3) weaknesses.push("기술 스택 다양화 권장");
+  }
 
   return (
     <Card className="border-border/60">
@@ -138,6 +147,27 @@ export function AIAnalysisSection({
                 >
                   <TrendingUp className="mt-0.5 h-3.5 w-3.5 shrink-0 text-yellow-600" />
                   {w}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Recommendations */}
+        {recommendations.length > 0 && (
+          <div>
+            <div className="mb-3 flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-primary" />
+              <p className="text-sm font-semibold">추천 사항</p>
+            </div>
+            <ul className="space-y-2">
+              {recommendations.map((r) => (
+                <li
+                  key={r}
+                  className="flex items-start gap-2 text-sm text-muted-foreground"
+                >
+                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                  {r}
                 </li>
               ))}
             </ul>

@@ -31,7 +31,7 @@ export function HeroSection() {
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5">
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">
-              AI 기반 취업 루트 분석
+              AI 기반 취업 동아줄 분석
             </span>
           </div>
 
@@ -45,7 +45,7 @@ export function HeroSection() {
           {/* Subtitle */}
           <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-primary-foreground/60 md:text-xl">
             실제 합격자들이 어떤 준비 과정을 거쳐 취업에 성공했는지 시각화하고,
-            AI가 나와 가장 유사한 합격 루트를 찾아드립니다.
+            AI가 나와 가장 유사한 합격 동아줄을 찾아드립니다.
           </p>
 
           {/* CTA Buttons */}
@@ -62,7 +62,7 @@ export function HeroSection() {
               className="gap-2 border-primary-foreground/20 bg-transparent px-8 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               asChild
             >
-              <Link href="/dashboard">합격 루트 둘러보기</Link>
+              <Link href="/dashboard">합격 동아줄 둘러보기</Link>
             </Button>
           </div>
 
@@ -76,7 +76,7 @@ export function HeroSection() {
                 </span>
               </div>
               <span className="text-sm text-primary-foreground/50">
-                합격자 루트 수집
+                합격자 동아줄 수집
               </span>
             </div>
             <div className="flex flex-col items-center gap-2">

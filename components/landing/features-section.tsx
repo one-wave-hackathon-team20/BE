@@ -9,7 +9,7 @@ import { Route, Brain, BarChart3, RefreshCw } from "lucide-react";
 const features = [
   {
     icon: Route,
-    title: "합격 루트 시각화",
+    title: "합격 동아줄 시각화",
     description:
       "합격자의 준비 과정을 단계별 타임라인으로 시각화하여, 성공까지의 여정을 한눈에 파악할 수 있습니다.",
   },
@@ -17,7 +17,7 @@ const features = [
     icon: Brain,
     title: "AI 기반 유사도 분석",
     description:
-      "나의 스펙과 합격자 데이터를 AI가 비교 분석하여, 가장 유사한 합격 루트를 자동으로 추천해드립니다.",
+      "나의 스펙과 합격자 데이터를 AI가 비교 분석하여, 가장 유사한 합격 동아줄을 자동으로 추천해드립니다.",
   },
   {
     icon: BarChart3,
@@ -45,7 +45,7 @@ export function FeaturesSection() {
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-pretty text-muted-foreground">
           기존 취업 서비스가 알려주지 않는 것, 바로 합격까지의 과정입니다.
-          루트 맵은 결과가 아닌 여정에 집중합니다.
+          동아줄은 결과가 아닌 여정에 집중합니다.
         </p>
       </div>
 

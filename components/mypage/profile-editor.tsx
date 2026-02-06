@@ -36,25 +36,57 @@ import {
   JOB_LABELS,
   BACKGROUND_LABELS,
 } from "@/lib/data";
+import { apiClient } from "@/lib/api/client";
+import { convertJobFromApi, convertBackgroundFromApi, convertJobToApi, convertBackgroundToApi } from "@/lib/api/converters";
+import { useAuth } from "@/contexts/auth-context";
+import { toast } from "sonner";
 
 export function ProfileEditor() {
   const router = useRouter();
+  const { isAuthenticated, refreshUser } = useAuth();
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
   const [saved, setSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = sessionStorage.getItem("userProfile");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          setUser({ ...DEFAULT_USER, ...parsed });
-        } catch {
-          // fallback
-        }
-      }
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
     }
-  }, []);
+
+    const loadUser = async () => {
+      try {
+        setIsLoading(true);
+        const response = await apiClient.getMyInfo();
+        if (response.isSuccess && response.data) {
+          const userData = response.data;
+          
+          if (userData.userDetails) {
+            setUser({
+              userId: userData.id,
+              name: userData.nickname,
+              job: convertJobFromApi(userData.userDetails.job),
+              background: convertBackgroundFromApi(userData.userDetails.background),
+              companySizes: (userData.userDetails.companySizes || []) as CompanySize[],
+              skills: userData.userDetails.skills || [],
+              projects: userData.userDetails.projects || 0,
+              intern: userData.userDetails.intern || false,
+              bootcamp: userData.userDetails.bootcamp || false,
+              awards: userData.userDetails.awards || false,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load user:", error);
+        toast.error("사용자 정보를 불러올 수 없습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUser();
+  }, [isAuthenticated, router]);
 
   const updateField = <K extends keyof UserProfile>(
     key: K,
@@ -78,18 +110,57 @@ export function ProfileEditor() {
     updateField("skills", updated);
   };
 
-  const handleSave = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("userProfile", JSON.stringify(user));
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const response = await apiClient.updateUser({
+        job: user.job ? convertJobToApi(user.job) : undefined,
+        background: user.background ? convertBackgroundToApi(user.background) : undefined,
+        companySizes: user.companySizes.length > 0 ? user.companySizes : undefined,
+        skills: user.skills.length > 0 ? user.skills : undefined,
+        projects: user.projects,
+        intern: user.intern || undefined,
+        bootcamp: user.bootcamp || undefined,
+        awards: user.awards || undefined,
+        nickname: user.name,
+      });
+
+      if (response.isSuccess) {
+        setSaved(true);
+        await refreshUser();
+        toast.success("정보가 저장되었습니다.");
+        setTimeout(() => setSaved(false), 2000);
+      } else {
+        throw new Error(response.message || "저장에 실패했습니다.");
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "저장에 실패했습니다.");
+    } finally {
+      setIsSaving(false);
     }
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
   };
 
-  const handleReanalyze = () => {
-    handleSave();
-    router.push("/dashboard");
+  const handleReanalyze = async () => {
+    await handleSave();
+    // Trigger new analysis
+    try {
+      await apiClient.analyze();
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error("재분석에 실패했습니다.");
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-primary" />
+          <p className="mt-4 text-muted-foreground">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">
@@ -101,11 +172,16 @@ export function ProfileEditor() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" onClick={handleSave} className="gap-2 bg-transparent">
+          <Button 
+            variant="outline" 
+            onClick={handleSave} 
+            className="gap-2 bg-transparent"
+            disabled={isSaving}
+          >
             <Save className="h-4 w-4" />
-            {saved ? "저장됨" : "저장"}
+            {saved ? "저장됨" : isSaving ? "저장 중..." : "저장"}
           </Button>
-          <Button onClick={handleReanalyze} className="gap-2">
+          <Button onClick={handleReanalyze} className="gap-2" disabled={isSaving}>
             <RotateCcw className="h-4 w-4" />
             재분석
             <ArrowRight className="h-4 w-4" />
@@ -369,11 +445,16 @@ export function ProfileEditor() {
 
         {/* Bottom CTA */}
         <div className="flex justify-center gap-4 pb-8">
-          <Button variant="outline" onClick={handleSave} className="gap-2 bg-transparent">
+          <Button 
+            variant="outline" 
+            onClick={handleSave} 
+            className="gap-2 bg-transparent"
+            disabled={isSaving}
+          >
             <Save className="h-4 w-4" />
-            {saved ? "저장 완료" : "변경사항 저장"}
+            {saved ? "저장 완료" : isSaving ? "저장 중..." : "변경사항 저장"}
           </Button>
-          <Button onClick={handleReanalyze} className="gap-2">
+          <Button onClick={handleReanalyze} className="gap-2" disabled={isSaving}>
             변경사항으로 재분석
             <ArrowRight className="h-4 w-4" />
           </Button>
