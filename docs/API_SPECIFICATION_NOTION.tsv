@@ -1,0 +1,12 @@
+Method	URL	Description	Auth	Domain	Request Body	Response (data)	Error Codes
+POST	/api/v1/auth/signup	회원가입	❌	Auth	{ email: String(필수), password: String(필수), nickname: String(필수) }	{ userId, email, nickname }	A001(이메일 중복), C002(입력값 오류)
+POST	/api/v1/auth/login	로그인	❌	Auth	{ email: String(필수), password: String(필수) }	{ accessToken, refreshToken }	A002(이메일/비밀번호 불일치)
+POST	/api/v1/auth/reissue	토큰 재발급	❌	Auth	{ refreshToken: String(필수) }	{ accessToken, refreshToken }	A003(유효하지 않은 토큰), A004(만료된 토큰)
+POST	/api/v1/users/me/onboarding	온보딩 정보 입력	✅ Bearer	User	{ job: Enum(필수), background: Enum(필수), companySizes: Enum[](필수), skills: String[](필수), projects: Integer, intern: Boolean, bootcamp: Boolean, awards: Boolean }	{ userId, job, background, companySizes, skills, projects, intern, bootcamp, awards, onboardingCompleted }	C002(필수값 누락)
+GET	/api/v1/users/me	내 정보 조회	✅ Bearer	User	없음	{ userId, email, nickname, job, background, companySizes, skills, projects, intern, bootcamp, awards, onboardingCompleted, createdAt }	U001(사용자 없음)
+PATCH	/api/v1/users/me	내 정보 수정	✅ Bearer	User	{ job?, background?, companySizes?, skills?, projects?, intern?, bootcamp?, awards? } (변경할 필드만)	{ userId, job, background, companySizes, skills, projects, intern, bootcamp, awards }	C002(입력값 오류)
+GET	/api/v1/routes	합격자 루트 목록 조회	✅ Bearer	Route	Query: job?, background?, companySize?, page?(기본0), size?(기본10)	{ content: [{ routeId, job, background, finalCompanySize, summary, totalSteps, createdAt }], page, size, totalElements, totalPages }	없음
+GET	/api/v1/routes/{routeId}	합격자 루트 상세 조회	✅ Bearer	Route	Path: routeId(Long)	{ routeId, job, background, finalCompanySize, skills, steps: [{ stepId, order, title, description, duration, tips }], keyFactors, createdAt }	R001(루트 없음)
+POST	/api/v1/analysis	AI 유사 합격자 분석 요청	✅ Bearer	Analysis	없음 (서버에서 사용자 정보 자동 조회)	{ analysisId, matchedRoutes: [{ routeId, similarity, summary, job, finalCompanySize }], aiInsight: { reason, strengths[], weaknesses[], recommendations[] }, analyzedAt }	AI001(Gemini API 실패), AI002(온보딩 미완료)
+GET	/api/v1/analysis/latest	최근 분석 결과 조회	✅ Bearer	Analysis	없음	POST /analysis 응답과 동일	AI002(분석 이력 없음)
+GET	/api/v1/analysis	분석 이력 목록 조회	✅ Bearer	Analysis	Query: page?(기본0), size?(기본5)	{ content: [{ analysisId, topMatchSummary, topSimilarity, analyzedAt }], page, size, totalElements, totalPages }	없음
