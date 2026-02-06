@@ -185,6 +185,17 @@ Value: true
 
 ---
 
+### 17. SWAGGER_SERVER_URL
+```
+Name: SWAGGER_SERVER_URL
+Value: https://spring-app-177609243769.asia-northeast3.run.app
+```
+
+**Important:** This tells Swagger UI to use HTTPS instead of HTTP for API requests.
+Without this, Swagger will auto-detect as HTTP and fail with CORS errors.
+
+---
+
 ## 🚨 Critical Items to Change
 
 Before deploying to production, **MUST CHANGE**:
@@ -239,6 +250,7 @@ These secrets already have correct values:
 14. REDIS_PASSWORD = 
 15. CORS_ALLOWED_ORIGINS = https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app
 16. CORS_ALLOW_CREDENTIALS = true
+17. SWAGGER_SERVER_URL = https://spring-app-177609243769.asia-northeast3.run.app
 ```
 
 ---

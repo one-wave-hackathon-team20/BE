@@ -55,6 +55,10 @@ gemini:
 server:
   port: ${PORT:8080} # Cloud Run은 PORT 환경변수 사용
 
+# Swagger Configuration (Production)
+swagger:
+  server-url: ${SWAGGER_SERVER_URL:https://spring-app-177609243769.asia-northeast3.run.app}
+
 # CORS Configuration (Production)
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app}

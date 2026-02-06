@@ -73,6 +73,10 @@ gemini:
 server:
   port: ${SERVER_PORT:8080}
 
+# Swagger Configuration
+swagger:
+  server-url: "" # Empty for local development (auto-detect)
+
 # CORS Configuration
 cors:
   allowed-origins: "*"  # Development: allow all origins. Production: specify exact domains
