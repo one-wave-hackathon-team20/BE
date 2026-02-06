@@ -46,7 +46,8 @@ public class CorsConfig {
         if (allowedOrigins.length == 1 && "*".equals(allowedOrigins[0])) {
             configuration.addAllowedOriginPattern("*"); // Allow all origins (development only)
         } else {
-            configuration.setAllowedOrigins(Arrays.asList(allowedOrigins));
+            // Use addAllowedOriginPattern instead of setAllowedOrigins for better compatibility
+            Arrays.stream(allowedOrigins).forEach(configuration::addAllowedOriginPattern);
         }
         
         // Allowed HTTP methods

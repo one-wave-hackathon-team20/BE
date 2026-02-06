@@ -178,10 +178,12 @@ Value: https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-north
 ### 16. CORS_ALLOW_CREDENTIALS
 ```
 Name: CORS_ALLOW_CREDENTIALS
-Value: true
+Value: false
 ```
 
-(Set to `true` if your frontend sends cookies or authorization headers)
+**Important:** Set to `false` for public APIs. Only set to `true` if you need to send cookies.
+
+**Note:** When `true`, you MUST use specific domains in `CORS_ALLOWED_ORIGINS` (cannot use "*")
 
 ---
 
@@ -249,7 +251,7 @@ These secrets already have correct values:
 13. REDIS_PORT = 6379
 14. REDIS_PASSWORD = 
 15. CORS_ALLOWED_ORIGINS = https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app
-16. CORS_ALLOW_CREDENTIALS = true
+16. CORS_ALLOW_CREDENTIALS = false
 17. SWAGGER_SERVER_URL = https://spring-app-177609243769.asia-northeast3.run.app
 ```
 

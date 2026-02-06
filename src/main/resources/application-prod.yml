@@ -65,7 +65,7 @@ cors:
   allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowed-headers: "*"
   exposed-headers: Authorization
-  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+  allow-credentials: ${CORS_ALLOW_CREDENTIALS:false}
   max-age: 3600
 
 # Logging (운영 환경)
