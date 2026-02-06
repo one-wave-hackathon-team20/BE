@@ -1,0 +1,27 @@
+spring:
+  # Database (로컬 PostgreSQL 사용 시)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 5
+      minimum-idle: 1
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Redis (선택사항)
+  data:
+    redis:
+      host: localhost
+      port: 6379

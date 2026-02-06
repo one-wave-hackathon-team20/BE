@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: server
+
+  # Database (Supabase PostgreSQL)
+  # 주석 처리하여 H2 인메모리 DB 사용 또는 아래 주석 해제하여 Supabase 사용
+  # datasource:
+  #   url: jdbc:postgresql://db.wzchbdlcnycaimiowcei.supabase.co:5432/postgres?sslmode=require&connectTimeout=30&socketTimeout=30&loginTimeout=30
+  #   username: postgres
+  #   password: "WSQ4E$sGfEksB$h"
+  #   driver-class-name: org.postgresql.Driver
+  #   hikari:
+  #     connection-timeout: 30000
+  #     maximum-pool-size: 5
+  #     minimum-idle: 1
+  #     idle-timeout: 300000
+  #     max-lifetime: 600000
+  #     leak-detection-threshold: 60000
+  #     initialization-fail-timeout: -1
+  
+  # H2 인메모리 데이터베이스 (개발/테스트용)
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        # H2 사용 시
+        dialect: org.hibernate.dialect.H2Dialect
+        # PostgreSQL 사용 시 (위 datasource 주석 해제 시)
+        # dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+  
+  # H2 콘솔 활성화 (개발용)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # Redis (선택사항 - 없어도 애플리케이션 실행 가능)
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+
+# Supabase
+supabase:
+  url: https://wzchbdlcnycaimiowcei.supabase.co
+  service-role-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Y2hiZGxjbnljYWltaW93Y2VpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDM5NjE1MCwiZXhwIjoyMDg1OTcyMTUwfQ.PNBe5t5eomhcXcsEZP84k0p4s026y65itdAV2ZWOIl4
+
+# JWT
+jwt:
+  secret: test-secret-key-for-development-min-256-bits-long-string-here-change-in-production
+  access-token-expiration: 3600000 # 1 hour
+  refresh-token-expiration: 604800000 # 7 days
+
+# Google Gemini API
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  project-id: ${GEMINI_PROJECT_ID:}
+  location: ${GEMINI_LOCATION:us-central1}
+  model: gemini-pro
+
+# Server
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    com.onewave.server: DEBUG
+    org.springframework.security: DEBUG
