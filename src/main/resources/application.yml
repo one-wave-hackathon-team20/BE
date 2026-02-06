@@ -73,6 +73,15 @@ gemini:
 server:
   port: ${SERVER_PORT:8080}
 
+# CORS Configuration
+cors:
+  allowed-origins: "*"  # Development: allow all origins. Production: specify exact domains
+  allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowed-headers: "*"
+  exposed-headers: Authorization
+  allow-credentials: false  # Set to true if you need to send cookies/credentials
+  max-age: 3600
+
 # Logging
 logging:
   level:

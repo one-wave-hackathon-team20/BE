@@ -112,6 +112,22 @@ https://randomkeygen.com/
 
 ---
 
+## 6️⃣ CORS Configuration (Optional but Recommended for Production)
+
+### `CORS_ALLOWED_ORIGINS`
+**설명**: CORS allowed origins - frontend URLs that can access your API  
+**개발 환경**: `*` (모든 origin 허용)  
+**운영 환경**: `https://dongajul-fe.vercel.app,https://yourdomain.com` (실제 프론트엔드 도메인)  
+**현재 프론트엔드**: `https://dongajul-fe.vercel.app` (Vercel 배포)  
+**예시**: `https://example.com,https://app.example.com`
+
+### `CORS_ALLOW_CREDENTIALS`
+**설명**: Whether to allow credentials (cookies, authorization headers)  
+**현재 값**: `false`  
+**쿠키 사용 시**: `true` (단, allowedOrigins는 "*"가 아닌 구체적인 도메인이어야 함)
+
+---
+
 ## 📝 등록 순서 (복사 & 붙여넣기용)
 
 ```
@@ -156,6 +172,12 @@ https://randomkeygen.com/
 
 이름: REDIS_PASSWORD
 값: (비어있거나 Redis 비밀번호)
+
+이름: CORS_ALLOWED_ORIGINS
+값: https://dongajul-fe.vercel.app,https://yourdomain.com,https://www.yourdomain.com
+
+이름: CORS_ALLOW_CREDENTIALS
+값: true
 ```
 
 ---

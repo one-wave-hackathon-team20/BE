@@ -55,6 +55,15 @@ gemini:
 server:
   port: ${PORT:8080} # Cloud Run은 PORT 환경변수 사용
 
+# CORS Configuration (Production)
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://dongajul-fe.vercel.app,https://yourdomain.com,https://www.yourdomain.com}
+  allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowed-headers: "*"
+  exposed-headers: Authorization
+  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+  max-age: 3600
+
 # Logging (운영 환경)
 logging:
   level:
