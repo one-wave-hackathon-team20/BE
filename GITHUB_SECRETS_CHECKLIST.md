@@ -161,12 +161,16 @@ Value:
 ### 15. CORS_ALLOWED_ORIGINS ⭐ IMPORTANT!
 ```
 Name: CORS_ALLOWED_ORIGINS
-Value: https://dongajul-fe.vercel.app
+Value: https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app
 ```
+
+**Explanation:**
+- `https://dongajul-fe.vercel.app` - Your Vercel frontend
+- `https://spring-app-177609243769.asia-northeast3.run.app` - Your Cloud Run backend (for Swagger UI)
 
 **For multiple domains:**
 ```
-Value: https://dongajul-fe.vercel.app,https://custom-domain.com
+Value: https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app,https://custom-domain.com
 ```
 
 ---
@@ -233,7 +237,7 @@ These secrets already have correct values:
 12. REDIS_HOST = localhost
 13. REDIS_PORT = 6379
 14. REDIS_PASSWORD = 
-15. CORS_ALLOWED_ORIGINS = https://dongajul-fe.vercel.app
+15. CORS_ALLOWED_ORIGINS = https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app
 16. CORS_ALLOW_CREDENTIALS = true
 ```
 

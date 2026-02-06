@@ -57,7 +57,7 @@ server:
 
 # CORS Configuration (Production)
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://dongajul-fe.vercel.app,https://yourdomain.com,https://www.yourdomain.com}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app}
   allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowed-headers: "*"
   exposed-headers: Authorization
