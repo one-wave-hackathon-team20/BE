@@ -2,30 +2,28 @@ spring:
   application:
     name: server
 
-  # Database (Supabase PostgreSQL)
+  # H2 인메모리 데이터베이스 (테스트/데모용)
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
-      minimum-idle: 2
-      idle-timeout: 300000
-      max-lifetime: 600000
-      leak-detection-threshold: 60000
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
   # JPA
   jpa:
     hibernate:
-      ddl-auto: validate # 운영에서는 validate 사용 (절대 update 사용하지 말 것!)
-    show-sql: false # 운영에서는 false
+      ddl-auto: update  # H2 사용 시 update로 변경
+    show-sql: false
     properties:
       hibernate:
         format_sql: false
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
     open-in-view: false
+
+  # H2 콘솔 비활성화 (운영 환경)
+  h2:
+    console:
+      enabled: false
 
   # Redis
   data:
@@ -35,10 +33,10 @@ spring:
       password: ${REDIS_PASSWORD:}
       timeout: 2000ms
 
-# Supabase
+# Supabase (사용 안 함 - H2 사용)
 supabase:
-  url: ${SUPABASE_URL}
-  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
+  url: ${SUPABASE_URL:https://dummy.supabase.co}
+  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:dummy-key}
 
 # JWT
 jwt:
@@ -53,7 +51,7 @@ gemini:
 
 # Server
 server:
-  port: ${PORT:8080} # Cloud Run은 PORT 환경변수 사용
+  port: ${PORT:8080}
 
 # Swagger Configuration (Production)
 swagger:
