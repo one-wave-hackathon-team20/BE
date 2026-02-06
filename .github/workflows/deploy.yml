@@ -42,3 +42,16 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           flags: '--allow-unauthenticated'
+          env_vars: |
+            SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+            SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_ACCESS_TOKEN_EXPIRATION=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}
+            JWT_REFRESH_TOKEN_EXPIRATION=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            REDIS_HOST=${{ secrets.REDIS_HOST }}
+            REDIS_PORT=${{ secrets.REDIS_PORT }}
+            REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
