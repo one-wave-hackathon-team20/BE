@@ -61,11 +61,11 @@ swagger:
 
 # CORS Configuration (Production)
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://dongajul-fe.vercel.app,https://spring-app-177609243769.asia-northeast3.run.app}
+  allowed-origins: "*"
   allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowed-headers: "*"
   exposed-headers: Authorization
-  allow-credentials: ${CORS_ALLOW_CREDENTIALS:false}
+  allow-credentials: false
   max-age: 3600
 
 # Logging (운영 환경)
