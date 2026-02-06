@@ -1,5 +1,5 @@
-# 1. 베이스 이미지: Java 17 실행 환경
-FROM openjdk:17-jdk-slim
+# 1. 베이스 이미지
+FROM eclipse-temurin:17-jdk-jammy
 
 # 2. JAR 파일 위치 정의: 위 gradle 설정으로 생성된 app.jar를 지정
 ARG JAR_FILE=build/libs/app.jar
